@@ -21,12 +21,12 @@ Antes de ejecutar cualquier script en este proyecto, asegúrate de **crear y act
     ```bash
    pip install -r requirements.txt
 # Índice
-1. [Obtener información de la API](#obtener-información-de-la-api)
-2. [Almacenar los datos crudos JSON](#almacenar-los-datos-crudos-json)
-3. [Generación de Profiling de Datos y Análisis](#generación-de-profiling-de-datos-y-análisis)
-4. [Análisis del Profiling y Operaciones de Limpieza de Datos](#análisis-del-profiling-y-operaciones-de-limpieza-de-datos)
-5. [Almacenamiento en Base de Datos y Operaciones de Agregación](#almacenamiento-en-base-de-datos-y-operaciones-de-agregación)
-6. [Generación de Diagrama ER del Modelo de Datos](#generación-de-diagrama-er-del-modelo-de-datos)
+1. [Obtención de datos y almacenamiento](#1-obtencion-de-datos-y-almacenamiento)
+2. [Procesamiento de los Datos JSON a DataFrames y Almacenamiento en Parquet](#2-procesamiento-de-los-datos-json-a-dataframes-y-almacenamiento-en-parquet)
+3. [Generación de Profiling de Datos y Análisis](#3-generacion-de-profiling-de-datos-y-analisis)
+4. [Análisis del Profiling y Operaciones de Limpieza de Datos](#4-analisis-del-profiling-y-operaciones-de-limpieza-de-datos)
+5. [Almacenamiento en Base de Datos y Operaciones de Agregación](#5-almacenamiento-en-base-de-datos-y-operaciones-de-agregacion)
+6. [Generación de Diagrama ER del Modelo de Datos](#6-generacion-de-diagrama-er-del-modelo-de-datos)
 
 ## 1. Obtención de datos y almacenamiento
 
