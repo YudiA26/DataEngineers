@@ -28,7 +28,7 @@ Antes de ejecutar cualquier script en este proyecto, asegúrate de **crear y act
 5. [Almacenamiento en Base de Datos y Operaciones de Agregación](#5-almacenamiento-en-base-de-datos-y-operaciones-de-agregacion)
 6. [Generación de Diagrama ER del Modelo de Datos](#6-generacion-de-diagrama-er-del-modelo-de-datos)
 
-## 1. Obtención de datos y almacenamiento
+# 1. Obtención de datos y almacenamiento
 
 El primer paso del proyecto consiste en obtener datos de series emitidas en enero de 2024 desde el API de TVMaze.
 
@@ -49,7 +49,7 @@ Los datos obtenidos se guardan en la siguiente ruta:
 ``` 
 El archivo JSON con los datos de enero de 2024 se generará en la carpeta json.
 
-## 2. Procesamiento de los Datos JSON a DataFrames y Almacenamiento en Parquet
+# 2. Procesamiento de los Datos JSON a DataFrames y Almacenamiento en Parquet
 
 ### Descripción
 El archivo `process_data.py` realiza el procesamiento de los datos obtenidos en formato JSON desde el API de TVMaze y los convierte a un formato más eficiente (Parquet) que respeta la integridad de los datos y facilita su manipulación en etapas posteriores. Este paso permite estructurar los datos en un formato tabular usando la librería `pandas`, donde se separan y normalizan los campos clave.
@@ -80,7 +80,8 @@ Para ejecutar el script y generar el archivo Parquet:
 2. Desde el directorio `src`, ejecuta el script:
    ```bash
    python process_data.py
-## 3. Generación de Profiling de Datos y Análisis
+
+# 3. Generación de Profiling de Datos y Análisis
 
 #### Descripción
 Este paso utiliza `pandas-profiling` para generar un reporte exploratorio completo de los datos en formato HTML. El profiling permite realizar un análisis exhaustivo del dataset de shows emitidos en enero de 2024, proporcionando estadísticas y visualizaciones que destacan patrones, correlaciones y posibles problemas de calidad de datos.
@@ -112,7 +113,8 @@ Para generar el reporte de profiling en HTML:
 2. Desde el directorio `src`, ejecuta el script:
    ```bash
    python profiling_data.py
-## 4. Análisis del Profiling y Operaciones de Limpieza de Datos 
+
+# 4. Análisis del Profiling y Operaciones de Limpieza de Datos
 
 ### Descripción
 Con base en el análisis del profiling detallado en `profiling/profiling_analysis.md`, se realizaron las operaciones de limpieza necesarias para asegurar la calidad y consistencia del dataset antes de los análisis. El objetivo es transformar los datos para reducir redundancias, manejar valores faltantes, y corregir outliers, mejorando así su calidad y eficiencia para análisis posteriores.
@@ -148,7 +150,8 @@ Para ejecutar el proceso de limpieza y almacenar el DataFrame limpio:
    python data_cleaning_pipeline.py
 ### Salida Generada: 
 Al ejecutar el script, se generará un nuevo archivo Parquet con los datos limpios en: `./data/shows_january_2024_cleaned.parquet`
-## 5. Almacenamiento en Base de Datos y Operaciones de Agregación
+
+# 5. Almacenamiento en Base de Datos y Operaciones de Agregación
 
 ### Descripción
 En esta sección, los datos limpios fueron almacenados en una base de datos SQLite para realizar operaciones de consulta y agregación de manera eficiente. El modelo de datos fue diseñado para mantener la integridad y relaciones de la información de los shows. Además, se realizaron consultas específicas para obtener información valiosa sobre los shows emitidos en enero de 2024.
@@ -250,7 +253,8 @@ Para ejecutar el almacenamiento y las consultas de agregación:
 2. Desde el directorio `src`, ejecuta el siguiente comando:
    ```bash
    python data_storage_and_analysis.py
-## 6. Generación de Diagrama ER del Modelo de Datos
+
+# 6. Generación de Diagrama ER del Modelo de Datos
 
 Para visualizar el modelo de datos utilizado en el proyecto, se generó un diagrama ER (Entidad-Relación) a partir de la estructura de la base de datos almacenada en SQLite. Este diagrama ayuda a comprender mejor las relaciones y la integridad de los datos entre las tablas creadas.
 
