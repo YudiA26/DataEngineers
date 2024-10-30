@@ -37,7 +37,6 @@ Este README documenta el análisis, las observaciones clave y la estrategia de l
 - **Texto**: 12
 - **Categóricas**: 14
 - **Fecha y Hora**: 4
-- **No soportadas**: 8  
 Las variables URL, Texto y No Soportadas requieren inspección adicional para decidir si deben incluirse o excluirse del análisis.
 
 ---
@@ -72,10 +71,6 @@ Las variables URL, Texto y No Soportadas requieren inspección adicional para de
   - **Idiomas más comunes**: Inglés (1,635), Chino (1,506)
   - **Datos faltantes**: 6.5%
 - **Recomendación**: Imputar valores faltantes con "Unknown" o la moda. Esta variable puede ser útil para agrupar el análisis de calificaciones y géneros.
-
-#### `_embedded_show_genres`
-- **Tipo No Soportado**: Puede ser una lista de géneros por show.
-- **Recomendación**: Convertir a tipo de texto compatible, como una cadena con géneros separados por comas, para facilitar el análisis y filtrado de géneros.
 
 ---
 
@@ -117,9 +112,5 @@ Algunas variables, como `image`, `summary`, `_embedded_show_network`, `_embedded
 2. **Convertir Variables No Soportadas**  
    - **`_embedded_show_genres`** y **`_embedded_show_image`** deben convertirse a texto o analizarse para decidir su relevancia.
 
-3. **Imputación de Datos Faltantes**  
-   - Usar la mediana para variables numéricas como `runtime`.
-   - Para variables categóricas como `_embedded_show_language`, imputar con la moda.
-
-4. **Detección y Tratamiento de Outliers**  
+3. **Detección y Tratamiento de Outliers**  
    - En `runtime`, donde existen outliers, aplicar métodos de suavizado o eliminar outliers con base en cuartiles.

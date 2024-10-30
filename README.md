@@ -70,8 +70,10 @@ El archivo `process_data.py` realiza el procesamiento de los datos obtenidos en 
    - **Campos del Show**: Detalles específicos del show, incluyendo `average` (rating promedio), `name` (nombre del show), `type`, `language`, `genres`, `status`, `averageRuntime`, `premiered`, `ended`, `officialSite`, y el `webChannel_name`.
    
    Esto permite disponer de un formato estructurado, lo que facilita el análisis de cada show y sus episodios.
+3. **Conversión de Variables No Soportadas**
+Para evitar problemas con datos en formato de lista, el script convierte las columnas `_embedded_show_genres` y `_embedded_show_image` a tipo cadena (texto) cuando están presentes. Además, convierte cualquier columna que contenga listas en sus filas a texto, evitando así errores de "unhashable type" al contar valores únicos.
 
-3. **Almacenamiento en Formato Parquet**  
+4. **Almacenamiento en Formato Parquet**  
    La función `save_to_parquet()` guarda el DataFrame en un archivo Parquet con compresión `snappy`, lo cual optimiza el tamaño y la velocidad de acceso en operaciones futuras.
 
 ### Ejecución del Script
@@ -128,18 +130,15 @@ Con base en el análisis del profiling detallado en `profiling/profiling_analysi
 1. **Eliminación de Variables con Alta Correlación y Baja Cobertura**  
    Basándonos en el análisis de correlación y cobertura de datos, eliminamos columnas redundantes o que presentaban una alta cantidad de datos faltantes, las cuales no aportan valor significativo al análisis.
 
-2. **Conversión de Variables No Soportadas**  
-   Se transformaron las variables de tipo lista o JSON (`_embedded_show_genres` y `_embedded_show_image`) a texto para asegurar que el DataFrame sea compatible y manejable en su estructura.
-
-3. **Imputación de Datos Faltantes**  
+2. **Imputación de Datos Faltantes**  
    Los valores faltantes en variables numéricas y categóricas importantes fueron imputados:
    - `runtime`: Valores faltantes fueron completados con la mediana.
    - `_embedded_show_language`: Valores faltantes fueron completados con la moda.
 
-4. **Tratamiento de Outliers**  
+3. **Tratamiento de Outliers**  
    Para la variable `runtime`, se aplicó una técnica de recorte basada en el rango intercuartílico (IQR) para limitar los valores dentro de un umbral razonable, minimizando el impacto de outliers que podrían sesgar el análisis.
 
-5. **Almacenamiento del Dataset Limpio**  
+4. **Almacenamiento del Dataset Limpio**  
    El dataset procesado se guarda en formato Parquet con compresión `snappy` en la carpeta `data`, lo que permite una mayor eficiencia de almacenamiento y rapidez en las consultas futuras.
 
 ### Ejecución del Script de Limpieza
@@ -166,18 +165,25 @@ En esta sección, los datos limpios fueron almacenados en una base de datos SQLi
    Los datos procesados y guardados en `./data/shows_january_2024_cleaned.parquet` se cargan en un DataFrame de pandas para su posterior almacenamiento en SQLite.
 
 2. **Creación del Modelo de Datos en SQLite**  
-   Se define la estructura de la tabla `shows`, que incluye las columnas más importantes del dataset. Esta estructura asegura la integridad de los datos y permite realizar consultas de manera organizada y eficiente. La tabla se crea si no existe en la base de datos `./db/shows_data.db`.
+   Se define un modelo de datos en estrella que incluye las siguientes tablas:
+
+   `dim_show`: Contiene información detallada de los shows.
+   `dim_genre`: Almacena géneros únicos de los shows.
+   `dim_schedule`: Incluye horarios y días de emisión.
+   `fact_episode`: Tabla de hechos que relaciona episodios con sus shows, géneros, y horarios.
+   Este modelo permite una estructura organizada y eficiente para realizar consultas en la base de datos `./db/shows_data.db`.
 
 3. **Almacenamiento de los Datos en SQLite**  
    El DataFrame se transfiere a la base de datos SQLite utilizando la función `to_sql`, reemplazando cualquier tabla existente con el mismo nombre. Esto asegura que los datos de cada ejecución se almacenen sin duplicación.
 
 4. **Operaciones de Agregación**  
    Se realizaron varias operaciones de agregación para extraer información relevante de la base de datos:
-- **a. Calcular Runtime Promedio (averageRuntime):**  
-     Runtime promedio: 44.484547710354164      
+- **a. Calcular Runtime Promedio (`averageRuntime`):**  
+     Calcula el tiempo de duración promedio de los shows, resultando en: `42.95 minutos`  
     
    
-   - **b. Conteo de Shows de TV por Género:**  
+   - **b. Conteo de Shows de TV por Género:** 
+   Consulta que muestra la cantidad de shows por género, agrupando los géneros asociados a cada show. Ejemplo de resultados:
         | embedded_show_genres                          | count |
         |-----------------------------------------------|-------|
         | ['Action', 'Adventure', 'Anime', 'Fantasy']   | 51    |
@@ -192,6 +198,7 @@ En esta sección, los datos limpios fueron almacenados en una base de datos SQLi
         | []                                            | 1468  |
 
 - **c. Listado de Dominios Únicos del Sitio Oficial de los Shows:**  
+Muestra los dominios únicos de los sitios oficiales de los shows, permitiendo identificar los principales sitios de streaming o de contenido de los shows. Algunos ejemplos de dominios únicos:
    
 | Dominios Únicos                           |                       |                       |                        |
 |-------------------------------------------|-----------------------|-----------------------|------------------------|
@@ -257,20 +264,28 @@ Para ejecutar el almacenamiento y las consultas de agregación:
 
 # 6. Generación de Diagrama ER del Modelo de Datos
 
-Para visualizar el modelo de datos utilizado en el proyecto, se generó un diagrama ER (Entidad-Relación) a partir de la estructura de la base de datos almacenada en SQLite. Este diagrama ayuda a comprender mejor las relaciones y la integridad de los datos entre las tablas creadas.
+Para visualizar el modelo de datos utilizado en el proyecto, se generaron diagramas ER (Entidad-Relación) que ilustran las relaciones y la estructura de las tablas creadas en la base de datos SQLite. Estos diagramas permiten una mejor comprensión de la integridad y organización de los datos.
 
+#### Diagramas Generados
+
+###### 1. Diagrama ER con ERAlchemy
 El diagrama fue generado usando la librería **ERAlchemy**, que permite crear visualizaciones del esquema de bases de datos en distintos formatos.
 
-#### Script utilizado: `model.py`
+##### Script utilizado: `model.py`
 
 **Descripción:**
 - El script `model.py` conecta con la base de datos SQLite `shows_data.db` y extrae su esquema para generar una imagen del modelo.
 - La imagen generada, `shows_data_schema.png`, se guarda en la carpeta `model/`.
 
-**Ruta de la base de datos y salida de la imagen:**
-- Base de datos: `./db/shows_data.db`
-- Imagen de salida: `./model/shows_data_schema.png`
 > Note:  Instalar la librería ERAlchemy y los requisitos necesarios para la generación del diagrama: 
 `pip install eralchemy`.
 
-El archivo de la imagen del diagrama ER puede encontrarse en `model/shows_data_schema.png` para facilitar su visualización.
+###### 2. Diagrama ER en Línea con dbdiagram.io
+
+Para complementar la visualización, también se creó un diagrama ER en línea mediante `dbdiagram.io`, lo cual permite visualizar el modelo en cualquier navegador y compartirlo fácilmente.
+Imagen generada: `Modelo.png`, disponible en la carpeta model/.
+###### Rutas de la Base de Datos y Archivos de Salida
+Base de datos: `./db/shows_data.db`
+Diagrama ER con ERAlchemy: `./model/shows_data_schema.png`
+Diagrama ER con dbdiagram.io: `./model/modelo.png`
+Ambas imágenes (shows_data_schema.png y modelo.png) se encuentran en la carpeta model/ para facilitar su consulta y análisis visual.
