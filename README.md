@@ -285,7 +285,7 @@ El diagrama fue generado usando la librería **ERAlchemy**, que permite crear vi
 Para complementar la visualización, también se creó un diagrama ER en línea mediante `dbdiagram.io`, lo cual permite visualizar el modelo en cualquier navegador y compartirlo fácilmente.
 Imagen generada: `Modelo.png`, disponible en la carpeta model/.
 ###### Rutas de la Base de Datos y Archivos de Salida
-Base de datos: `./db/shows_data.db`
-Diagrama ER con ERAlchemy: `./model/shows_data_schema.png`
-Diagrama ER con dbdiagram.io: `./model/modelo.png`
-Ambas imágenes (shows_data_schema.png y modelo.png) se encuentran en la carpeta model/ para facilitar su consulta y análisis visual.
+ - Base de datos: `./db/shows_data.db`
+ - Diagrama ER con ERAlchemy: `./model/shows_data_schema.png`
+ - Diagrama ER con dbdiagram.io: `./model/modelo.png`
+ - Ambas imágenes (shows_data_schema.png y modelo.png) se encuentran en la carpeta model/ para facilitar su consulta y análisis visual.
