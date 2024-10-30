@@ -48,6 +48,7 @@ Los datos obtenidos se guardan en la siguiente ruta:
    python fetch_data.py
 ``` 
 El archivo JSON con los datos de enero de 2024 se generará en la carpeta json.
+...
 
 # 2. Procesamiento de los Datos JSON a DataFrames y Almacenamiento en Parquet
 
